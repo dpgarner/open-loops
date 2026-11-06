@@ -53,8 +53,16 @@ function load(): AppState {
   return seedState();
 }
 
+/** Transient UI state: the outcome of the last import attempt. Never persisted. */
+export interface ImportNotice {
+  kind: 'ok' | 'error';
+  text: string;
+}
+
 export interface StoreApi {
   state: AppState;
+  importNotice: ImportNotice | null;
+  clearNotice(): void;
   capture(text: string): void;
   trashInbox(id: string): void;
   handleInbox(id: string): void;
@@ -87,6 +95,7 @@ const StoreContext = createContext<StoreApi | null>(null);
 
 export function StoreProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<AppState>(load);
+  const [importNotice, setImportNotice] = useState<ImportNotice | null>(null);
 
   useEffect(() => {
     try {
@@ -101,6 +110,11 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
     return {
       state,
+      importNotice,
+
+      clearNotice() {
+        setImportNotice(null);
+      },
 
       capture(text) {
         const value = text.trim();
@@ -340,19 +354,37 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       },
 
       importJson(file) {
+        const name = `“${file.name}”`;
         file
           .text()
           .then((text) => {
-            const parsed: unknown = JSON.parse(text);
-            if (!looksLikeExport(parsed)) return;
-            setState(normalize(parsed));
+            let parsed: unknown;
+            try {
+              parsed = JSON.parse(text);
+            } catch {
+              setImportNotice({ kind: 'error', text: `${name} is not valid JSON. Nothing was changed.` });
+              return;
+            }
+            if (!looksLikeExport(parsed)) {
+              setImportNotice({
+                kind: 'error',
+                text: `${name} is not an Open Loops backup. Nothing was changed.`,
+              });
+              return;
+            }
+            const next = normalize(parsed);
+            setState(next);
+            setImportNotice({
+              kind: 'ok',
+              text: `Imported ${name}: ${next.inbox.length} inbox, ${next.actions.length} actions, ${next.projects.length} projects, ${next.waiting.length} waiting, ${next.someday.length} someday.`,
+            });
           })
           .catch(() => {
-            // Importing a non-JSON file should do nothing rather than wipe the store.
+            setImportNotice({ kind: 'error', text: `Could not read ${name}. Nothing was changed.` });
           });
       },
     };
-  }, [state]);
+  }, [state, importNotice]);
 
   return <StoreContext.Provider value={api}>{children}</StoreContext.Provider>;
 }

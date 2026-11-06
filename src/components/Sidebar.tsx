@@ -86,6 +86,19 @@ export default function Sidebar({ tab, onTab, reviewDue }: Props) {
             Clear data
           </button>
         </div>
+        {store.importNotice && (
+          <p className={`notice ${store.importNotice.kind}`} role="status">
+            <span>{store.importNotice.text}</span>
+            <button
+              type="button"
+              className="btn tiny ghost"
+              aria-label="Dismiss message"
+              onClick={store.clearNotice}
+            >
+              ×
+            </button>
+          </p>
+        )}
         <p className="foot-note">Stored in this browser only. Nothing leaves the machine.</p>
       </div>
     </aside>
