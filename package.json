@@ -3,6 +3,10 @@
   "private": true,
   "version": "1.0.0",
   "description": "A local-first GTD workspace: capture, clarify, organise and review.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dpgarner/open-loops.git"
+  },
   "type": "module",
   "scripts": {
     "dev": "vite",

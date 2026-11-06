@@ -114,9 +114,21 @@ export default function Sidebar({ tab, onTab, reviewDue, onHelp }: Props) {
           </button>
         </div>
         <p className="foot-note">Stored in this browser only. Nothing leaves the machine.</p>
-        <p className="build-stamp" title={build ? `Built ${build.at}` : 'Served by the dev server'}>
-          {buildLabel(build)}
-        </p>
+        {build?.commitUrl ? (
+          <a
+            className="build-stamp"
+            href={build.commitUrl}
+            target="_blank"
+            rel="noreferrer"
+            title={`Built ${build.at} from ${build.commit}`}
+          >
+            {buildLabel(build)}
+          </a>
+        ) : (
+          <p className="build-stamp" title={build ? `Built ${build.at}` : 'Served by the dev server'}>
+            {buildLabel(build)}
+          </p>
+        )}
       </div>
     </aside>
   );

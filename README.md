@@ -85,8 +85,10 @@ update. The page re-checks when the window regains focus and every five minutes
 navigation and at most once a day.
 
 The sidebar footer shows the running build (`src/build.ts`): the same id the
-worker stamps into its cache names, plus the build time in UTC. Under `npm run
-dev` it reads "Development build".
+worker stamps into its cache names, the short commit it was built from — a link
+to that commit on GitHub, using the `repository` field in `package.json` — and
+the build time in UTC. Under `npm run dev`, or from a source zip with no git
+checkout, it reads "Development build" or omits the commit.
 
 ## Recovered
 

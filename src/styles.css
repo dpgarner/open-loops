@@ -982,12 +982,19 @@ body {
 /* ---------- build stamp ---------- */
 
 .build-stamp {
+  display: inline-block;
   margin: 0;
   color: var(--muted);
   font-size: 11px;
   letter-spacing: 0.2px;
   font-variant-numeric: tabular-nums;
   overflow-wrap: anywhere;
+  text-decoration: none;
+}
+
+a.build-stamp:hover {
+  color: var(--text);
+  text-decoration: underline;
 }
 
 /* ---------- update banner ---------- */
