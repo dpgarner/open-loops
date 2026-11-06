@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import type { Tab } from '../types';
 import { useStore } from '../store-context';
 import { activeProjects, availableActions, ticklerDueCount } from '../selectors';
+import { build, buildLabel } from '../build';
 
 interface Props {
   tab: Tab;
@@ -113,6 +114,9 @@ export default function Sidebar({ tab, onTab, reviewDue, onHelp }: Props) {
           </button>
         </div>
         <p className="foot-note">Stored in this browser only. Nothing leaves the machine.</p>
+        <p className="build-stamp" title={build ? `Built ${build.at}` : 'Served by the dev server'}>
+          {buildLabel(build)}
+        </p>
       </div>
     </aside>
   );

@@ -84,6 +84,10 @@ update. The page re-checks when the window regains focus and every five minutes
 (throttled to one check a minute), because the browser's own check only runs on
 navigation and at most once a day.
 
+The sidebar footer shows the running build (`src/build.ts`): the same id the
+worker stamps into its cache names, plus the build time in UTC. Under `npm run
+dev` it reads "Development build".
+
 ## Recovered
 
 The original build lived in an ephemeral cloud sandbox and no copy survived on

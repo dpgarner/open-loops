@@ -979,6 +979,17 @@ body {
   }
 }
 
+/* ---------- build stamp ---------- */
+
+.build-stamp {
+  margin: 0;
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: 0.2px;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
 /* ---------- update banner ---------- */
 
 .update-banner {
