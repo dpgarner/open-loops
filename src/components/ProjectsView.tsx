@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
-import { formatDate, isStuck, nextActionFor, useStore } from '../store';
+import { useStore } from '../store';
+import { formatDate, isStuck, nextActionFor } from '../selectors';
 import NextActionForm from './NextActionForm';
 
 function ProjectCard({ id }: { id: string }) {

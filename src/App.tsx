@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { Tab } from './types';
-import { formatDate, reviewIsDue, useStore } from './store';
+import { useStore } from './store';
+import { formatDate, reviewIsDue } from './selectors';
 import Sidebar from './components/Sidebar';
 import CaptureBar from './components/CaptureBar';
 import InboxView from './components/InboxView';

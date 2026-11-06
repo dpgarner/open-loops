@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import type { Tab } from '../types';
-import { activeProjects, openActions, useStore } from '../store';
+import { useStore } from '../store';
+import { activeProjects, openActions } from '../selectors';
 
 interface Props {
   tab: Tab;
