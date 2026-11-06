@@ -1,4 +1,4 @@
-import { useStore } from '../store';
+import { useStore } from '../store-context';
 import { daysSince } from '../selectors';
 import type { WaitingItem } from '../types';
 

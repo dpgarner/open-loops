@@ -1,7 +1,8 @@
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 import type { AppState, ProjectStatus } from './types';
 import { emptyState, seedState } from './seed';
+import { StoreContext } from './store-context';
 
 const KEY = 'open-loops.v1';
 
@@ -90,8 +91,6 @@ export interface StoreApi {
   exportJson(): void;
   importJson(file: File): void;
 }
-
-const StoreContext = createContext<StoreApi | null>(null);
 
 export function StoreProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<AppState>(load);
@@ -387,11 +386,5 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   }, [state, importNotice]);
 
   return <StoreContext.Provider value={api}>{children}</StoreContext.Provider>;
-}
-
-export function useStore(): StoreApi {
-  const store = useContext(StoreContext);
-  if (!store) throw new Error('useStore must be used inside StoreProvider');
-  return store;
 }
 

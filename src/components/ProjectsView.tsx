@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
-import { useStore } from '../store';
+import { useStore } from '../store-context';
 import { formatDate, isStuck, nextActionFor } from '../selectors';
 import NextActionForm from './NextActionForm';
 

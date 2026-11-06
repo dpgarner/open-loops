@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Tab } from '../types';
-import { useStore } from '../store';
+import { useStore } from '../store-context';
 import { activeProjects, daysSince, formatDate, isStuck, nextActionFor } from '../selectors';
 import ClarifyPanel, { type ClarifyMode } from './ClarifyPanel';
 import NextActionForm from './NextActionForm';

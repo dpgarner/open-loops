@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import type { RefObject } from 'react';
-import { useStore } from '../store';
+import { useStore } from '../store-context';
 
 export default function CaptureBar({ inputRef }: { inputRef: RefObject<HTMLInputElement> }) {
   const { capture } = useStore();

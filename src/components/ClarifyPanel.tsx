@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
-import { useStore } from '../store';
+import { useStore } from '../store-context';
 
 export type ClarifyMode = 'action' | 'project' | 'waiting' | 'someday';
 
