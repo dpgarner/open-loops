@@ -8,8 +8,13 @@
  * fallback; hashed build assets are cache-first because their names change on
  * every build; everything else same-origin (manifest, icons) is served from
  * cache and refreshed in the background.
+ *
+ * A new build does not activate itself. It waits until the page asks for it,
+ * so the user is never swapped onto a new build mid-edit (see src/offline-shell.ts).
+ * `__BUILD_ID__` is replaced at build time, so every build looks different to
+ * the browser and can be detected as an update.
  */
-const VERSION = 'v1';
+const VERSION = '__BUILD_ID__';
 const SHELL_CACHE = `open-loops-shell-${VERSION}`;
 const ASSET_CACHE = `open-loops-assets-${VERSION}`;
 
@@ -19,11 +24,15 @@ const OFFLINE_BODY = 'Open Loops is offline and this copy has no cached shell ye
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches
-      .open(SHELL_CACHE)
-      .then((cache) => cache.addAll(SHELL))
-      .then(() => self.skipWaiting()),
+    caches.open(SHELL_CACHE).then((cache) => cache.addAll(SHELL)),
   );
+});
+
+// Sent by the page once the user chooses to reload into the new build.
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });
 
 self.addEventListener('activate', (event) => {

@@ -76,6 +76,12 @@ registered only in production builds (`import.meta.env.PROD`), so `npm run dev`
 stays uncached and hot reload keeps working. Rebuild to pick up a change: hashed
 asset names change, and the worker replaces its old caches on activation.
 
+A new build does not swap itself in under a running page. It installs and waits,
+and the app shows a small "a new version is ready" banner with a **Reload** button
+(`src/components/UpdateBanner.tsx`, `src/offline-shell.ts`). Each build stamps a
+fresh id into `dist/sw.js`, so an asset-only rebuild is still detected as an
+update.
+
 ## Recovered
 
 The original build lived in an ephemeral cloud sandbox and no copy survived on

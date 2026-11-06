@@ -250,6 +250,10 @@ you need to move between them. And the cache is replaced the next time you load
 the app after a rebuild, so run the build again rather than editing files in
 place.
 
+When a newer build is available, it downloads in the background and a small banner
+appears at the bottom of the window: **Reload** switches to it. Nothing changes
+underneath you until you choose that, so you cannot lose a half-typed capture.
+
 `npm run dev` deliberately has no offline cache, so hot reload behaves normally.
 Install and offline behaviour come from the production build, which `npm run preview`
 serves if you want to try it.

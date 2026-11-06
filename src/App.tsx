@@ -12,6 +12,7 @@ import SomedayView from './components/SomedayView';
 import TicklerView from './components/TicklerView';
 import ReviewView from './components/ReviewView';
 import HelpPanel from './components/HelpPanel';
+import UpdateBanner from './components/UpdateBanner';
 
 const TITLES: Record<Tab, string> = {
   inbox: 'Inbox',
@@ -101,6 +102,8 @@ export default function App() {
           {tab === 'review' && <ReviewView onGoTo={setTab} />}
         </section>
       </main>
+
+      <UpdateBanner />
 
       {help && <HelpPanel onClose={closeHelp} />}
     </div>
