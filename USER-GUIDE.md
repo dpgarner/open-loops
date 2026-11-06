@@ -258,6 +258,21 @@ underneath you until you choose that, so you cannot lose a half-typed capture.
 Install and offline behaviour come from the production build, which `npm run preview`
 serves if you want to try it.
 
+### Which build am I running?
+
+The bottom of the sidebar carries a line like
+
+`Build mw5g933m · be6f971 · 2026-11-06 20:51 UTC`
+
+— the build id, the short commit it was built from, and when it was built, in UTC.
+The commit is a link to that exact commit on GitHub, which is the quickest way to see
+what changed. **Development build** in that spot means `npm run dev` is serving the
+page, so there is no build to compare.
+
+If the update banner is showing, press **Reload** and then read this line again: the id
+and commit should have moved to the new build. The id is a build timestamp rather than
+a version number, so compare the commit when you need to know exactly what you have.
+
 ## Your data, backups, and how not to lose it
 
 Everything you type is saved in your browser's local storage, for the address you opened
