@@ -2,22 +2,11 @@ import { useEffect, useRef } from 'react';
 import { build, buildLabel } from '../build';
 import SHORTCUTS from '../shortcuts.json';
 import RULES from '../rules.json';
+import GLOSSARY from '../glossary.json';
 
 interface Props {
   onClose: () => void;
 }
-
-const TERMS: Array<[string, string]> = [
-  ['Inbox', 'Things you captured but have not decided about yet. Emptying it means deciding, not doing.'],
-  ['Next action', 'One physical step you could take now: "Ring the venue", not "Sort out the offsite".'],
-  ['Context', 'Where or with what you would do it — @calls, @computer, @errands, @home.'],
-  ['Project', 'Any outcome that needs more than one action.'],
-  ['Stuck', 'A project with no open next action. The app says so instead of letting it sit quietly.'],
-  ['Waiting for', 'Something another person owes you. The app counts the days.'],
-  ['Someday / maybe', 'Ideas that are not commitments yet, parked with a note about why.'],
-  ['Tickler', 'The dating system. A dated action waits in Deferred until the morning of its day, then returns.'],
-  ['Weekly review', 'A guided pass over the whole system, about once a week.'],
-];
 
 const CHOICES: Array<[string, string]> = [
   ['Next action', 'One step you can do. Needs a context; a project and a date are optional.'],
@@ -99,10 +88,10 @@ export default function HelpPanel({ onClose }: Props) {
           <section className="help-section">
             <h3>The words</h3>
             <dl className="terms">
-              {TERMS.map(([term, meaning]) => (
+              {GLOSSARY.map(({ term, definition }) => (
                 <div key={term}>
                   <dt>{term}</dt>
-                  <dd>{meaning}</dd>
+                  <dd>{definition}</dd>
                 </div>
               ))}
             </dl>

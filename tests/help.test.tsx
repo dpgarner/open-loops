@@ -56,7 +56,7 @@ describe('help dialog', () => {
       'Version and updates',
       'Shortcuts',
     ]);
-    expect(dialog.querySelectorAll('.terms dt')).toHaveLength(9);
+    expect(dialog.querySelectorAll('.terms dt')).toHaveLength(12);
     // six inbox choices, four date rules, three data rules
     expect(within(dialog).getAllByRole('listitem')).toHaveLength(13);
     // a header row plus c, Enter, Tab and Space

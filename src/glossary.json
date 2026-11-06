@@ -1,0 +1,50 @@
+[
+  {
+    "term": "Capture",
+    "definition": "Writing something down before you decide what to do about it. The bar at the top of every screen does this."
+  },
+  {
+    "term": "Inbox",
+    "definition": "Where captured things wait until you decide. The goal is to empty it — not by doing the work, but by deciding."
+  },
+  {
+    "term": "Clarify",
+    "definition": "The decision itself: is this an action, a project, something someone owes you, a maybe, or nothing?"
+  },
+  {
+    "term": "Next action",
+    "definition": "One concrete physical step you could take right now: \"Ring the venue about the deposit\", not \"Sort out the offsite\"."
+  },
+  {
+    "term": "Context",
+    "definition": "Where or with what you would do an action — @calls, @computer, @errands, @home. You look at the list that matches where you are."
+  },
+  {
+    "term": "Project",
+    "definition": "Any outcome that needs more than one action. \"Team offsite\" is a project; \"Draft three bullet points\" is an action."
+  },
+  {
+    "term": "Stuck",
+    "definition": "A project with no open next action. It cannot move, so the app says so instead of letting it sit quietly."
+  },
+  {
+    "term": "Waiting for",
+    "definition": "Something another person owes you. Recording it frees your head; the app counts the days."
+  },
+  {
+    "term": "Someday / maybe",
+    "definition": "Ideas that are not commitments. Parked deliberately, with a note about why."
+  },
+  {
+    "term": "Tickler",
+    "definition": "The dating system. A dated action steps out of its list until the morning of that day, then comes back on its own."
+  },
+  {
+    "term": "Deferred",
+    "definition": "The section where actions with a future date wait. They are not forgotten — they are held back."
+  },
+  {
+    "term": "Weekly review",
+    "definition": "A guided pass over the whole system, about once a week, so nothing rots."
+  }
+]

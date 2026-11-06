@@ -4,9 +4,10 @@
  *
  *   src/shortcuts.json -> the keyboard shortcut table
  *   src/rules.json     -> the date rules and the data rules
+ *   src/glossary.json  -> the words table
  *
- * Run `npm run docs` after editing either file; `node scripts/docs.cjs --check`
- * fails if the guide is out of date. The test suite runs the equivalent check.
+ * Run `npm run docs` after editing any of them; `node scripts/docs.cjs --check`
+ * fails and names the stale block. The test suite runs the equivalent check.
  */
 const { readFileSync, writeFileSync } = require('node:fs');
 const { join } = require('node:path');
@@ -16,8 +17,15 @@ const GUIDE = join(ROOT, 'USER-GUIDE.md');
 
 const shortcuts = JSON.parse(readFileSync(join(ROOT, 'src', 'shortcuts.json'), 'utf8'));
 const rules = JSON.parse(readFileSync(join(ROOT, 'src', 'rules.json'), 'utf8'));
+const glossary = JSON.parse(readFileSync(join(ROOT, 'src', 'glossary.json'), 'utf8'));
 
 const BLOCKS = [
+  {
+    name: 'glossary',
+    start: '<!-- glossary:start -->',
+    end: '<!-- glossary:end -->',
+    body: renderGlossaryTable(glossary),
+  },
   {
     name: 'shortcuts',
     start: '<!-- shortcuts:start -->',
@@ -34,6 +42,14 @@ function boldKeys(keys) {
     .split('/')
     .map((part) => `**${part.trim()}**`)
     .join(' / ');
+}
+
+function renderGlossaryTable(entries) {
+  const lines = ['| Word | What it means here |', '|---|---|'];
+  for (const { term, definition } of entries) {
+    lines.push(`| **${term}** | ${definition} |`);
+  }
+  return lines.join('\n');
 }
 
 function renderShortcutTable(list) {
@@ -85,6 +101,6 @@ function main() {
   console.log(`Generated guide blocks written: ${BLOCKS.map((block) => block.name).join(', ')}`);
 }
 
-module.exports = { renderShortcutTable, renderBulletList, replaceBlock };
+module.exports = { renderGlossaryTable, renderShortcutTable, renderBulletList, replaceBlock };
 
 if (require.main === module) main();

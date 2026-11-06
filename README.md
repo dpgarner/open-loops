@@ -21,9 +21,9 @@ logic (including the midnight boundary). `npm run test:watch` keeps it running, 
 GitHub Actions runs `npm test` and `npm run build` on every push to `main` — see
 `.github/workflows/ci.yml`.
 
-The shortcut table and the date and data rules in `USER-GUIDE.md` are generated from
-`src/shortcuts.json` and `src/rules.json`, which the help panel also renders — `npm run docs`
-rewrites the guide, and a test fails if it drifts out of date.
+The glossary, shortcut table, and date and data rules in `USER-GUIDE.md` are generated from
+`src/glossary.json`, `src/shortcuts.json` and `src/rules.json`, which the help panel also
+renders — `npm run docs` rewrites the guide, and tests fail if any block drifts out of date.
 
 ## Which problem each screen solves
 

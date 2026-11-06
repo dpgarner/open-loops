@@ -25,13 +25,14 @@ tells you what is due when you look at it — it will not notify you.
 
 ## The words the app uses
 
+<!-- glossary:start -->
 | Word | What it means here |
 |---|---|
 | **Capture** | Writing something down before you decide what to do about it. The bar at the top of every screen does this. |
 | **Inbox** | Where captured things wait until you decide. The goal is to empty it — not by doing the work, but by deciding. |
 | **Clarify** | The decision itself: is this an action, a project, something someone owes you, a maybe, or nothing? |
 | **Next action** | One concrete physical step you could take right now: "Ring the venue about the deposit", not "Sort out the offsite". |
-| **Context** | Where or with what you would do an action — `@calls`, `@computer`, `@errands`, `@home`. You look at the list that matches where you are. |
+| **Context** | Where or with what you would do an action — @calls, @computer, @errands, @home. You look at the list that matches where you are. |
 | **Project** | Any outcome that needs more than one action. "Team offsite" is a project; "Draft three bullet points" is an action. |
 | **Stuck** | A project with no open next action. It cannot move, so the app says so instead of letting it sit quietly. |
 | **Waiting for** | Something another person owes you. Recording it frees your head; the app counts the days. |
@@ -39,6 +40,7 @@ tells you what is due when you look at it — it will not notify you.
 | **Tickler** | The dating system. A dated action steps out of its list until the morning of that day, then comes back on its own. |
 | **Deferred** | The section where actions with a future date wait. They are not forgotten — they are held back. |
 | **Weekly review** | A guided pass over the whole system, about once a week, so nothing rots. |
+<!-- glossary:end -->
 
 ## Your first ten minutes
 
@@ -304,9 +306,9 @@ There is one application-wide shortcut, and it is the useful one:
 | **Space** | Ticks or unticks a checkbox you have tabbed to. |
 <!-- shortcuts:end -->
 
-This table is generated from `src/shortcuts.json`, and the date and data rules in the
-earlier chapters from `src/rules.json` — the help panel renders the same files. `npm run docs`
-rewrites all three blocks after an edit.
+These tables and lists are generated from `src/glossary.json`, `src/shortcuts.json` and
+`src/rules.json` — the help panel renders the same files. `npm run docs` rewrites all four
+blocks after an edit.
 
 Everything else is a click, and every button says what it does. If you forget any of the
 above, the **Help** button at the bottom of the sidebar opens a summary over whatever you
