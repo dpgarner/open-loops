@@ -9,6 +9,10 @@ Vite + React + TypeScript, `localStorage` for persistence, no backend and no aut
 `npm run build` runs `tsc --noEmit` and then the production bundle, so a type
 error fails the build rather than shipping.
 
+`npm test` runs the Jest suite in `tests/` — the store's operations and
+persistence, the import/export path, the project rules, and the tickler date
+logic (including the midnight boundary). `npm run test:watch` keeps it running.
+
 ## Which problem each screen solves
 
 - **Capture** — the bar sits on every screen; `Enter` files it to the inbox, and
