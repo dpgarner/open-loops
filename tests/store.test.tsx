@@ -506,3 +506,110 @@ describe('importing a backup', () => {
     expect(result.current.importNotice).toBeNull();
   });
 });
+
+describe('contexts the store has not seen yet', () => {
+  const NEW = '@workshop';
+
+  it('creates the context when an inbox item is clarified into an action', () => {
+    const { result } = mount(makeState({ inbox: [inboxItem('i1', 'Build a shelf')] }));
+
+    act(() =>
+      result.current.clarifyNextAction('i1', {
+        title: 'Measure the wall',
+        context: NEW,
+        projectId: null,
+      }),
+    );
+
+    expect(result.current.state.contexts).toContain(NEW);
+    expect(result.current.state.actions[0].context).toBe(NEW);
+  });
+
+  it('creates the context for the first action of a project', () => {
+    const { result } = mount(makeState({ inbox: [inboxItem('i1', 'Build a shelf')] }));
+
+    act(() =>
+      result.current.clarifyProject('i1', {
+        title: 'Shelf',
+        outcome: 'A shelf on the wall',
+        firstActionTitle: 'Measure the wall',
+        context: NEW,
+      }),
+    );
+
+    expect(result.current.state.contexts).toContain(NEW);
+    expect(result.current.state.actions[0].context).toBe(NEW);
+  });
+
+  it('creates the context when an action is added directly', () => {
+    const { result } = mount(makeState());
+
+    act(() => result.current.addAction({ title: 'Cut the keys', context: NEW, projectId: null }));
+
+    expect(result.current.state.contexts).toContain(NEW);
+  });
+
+  it('creates the context when a project gets a next action', () => {
+    const { result } = mount(makeState({ projects: [makeProject({ id: 'p1' })] }));
+
+    act(() => result.current.defineNextAction('p1', { title: 'Cut the keys', context: NEW }));
+
+    expect(result.current.state.contexts).toContain(NEW);
+    expect(result.current.state.actions[0].projectId).toBe('p1');
+  });
+
+  it('does not duplicate a context it already has', () => {
+    const { result } = mount(makeState());
+
+    act(() => result.current.addAction({ title: 'Cut the keys', context: '@calls', projectId: null }));
+
+    expect(result.current.state.contexts.filter((c) => c === '@calls')).toHaveLength(1);
+  });
+});
+
+describe('input the store refuses', () => {
+  it('adds nothing for blank titles and context names', () => {
+    const { result } = mount(makeState());
+
+    act(() => {
+      result.current.addContext('   ');
+      result.current.addProject({ title: '  ', outcome: 'Something' });
+      result.current.defineNextAction('p-missing', { title: '', context: '@calls' });
+    });
+
+    expect(result.current.state.contexts).toEqual(emptyState().contexts);
+    expect(result.current.state.projects).toHaveLength(0);
+    expect(result.current.state.actions).toHaveLength(0);
+  });
+
+  it('changes nothing when an id is no longer in the list', () => {
+    const start = makeState({
+      actions: [makeAction({ id: 'a1' })],
+      projects: [makeProject({ id: 'p1' })],
+      someday: [makeIdea({ id: 's1' })],
+    });
+    const { result } = mount(start);
+
+    // A rendered row can outlive its record, so these no-ops must be harmless.
+    act(() => {
+      result.current.toggleAction('gone');
+      result.current.setActionDate('gone', '2026-11-10');
+      result.current.setProjectStatus('gone', 'completed');
+      result.current.setSomedayDate('gone', '2026-11-10');
+      result.current.promoteSomeday('gone');
+    });
+
+    expect(result.current.state.actions).toEqual(start.actions);
+    expect(result.current.state.projects).toEqual(start.projects);
+    expect(result.current.state.someday).toEqual(start.someday);
+    expect(result.current.state.inbox).toEqual(start.inbox);
+  });
+});
+
+describe('the store hook', () => {
+  it('refuses to be used outside the provider', () => {
+    const quiet = jest.spyOn(console, 'error').mockImplementation(() => {});
+    expect(() => renderHook(() => useStore())).toThrow('useStore must be used inside StoreProvider');
+    quiet.mockRestore();
+  });
+});

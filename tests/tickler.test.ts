@@ -11,7 +11,6 @@ import {
   nextWeekKey,
   ticklerDueCount,
   toDateKey,
-  todayKey,
   upcomingTickler,
 } from '../src/selectors';
 import { emptyState } from '../src/seed';
@@ -95,11 +94,6 @@ describe('date keys', () => {
 
   it('nextWeekKey is seven days out', () => {
     expect(nextWeekKey()).toBe(at(7));
-  });
-
-  it('defaults to today, which todayKey repeats', () => {
-    expect(toDateKey()).toBe('2026-11-06');
-    expect(todayKey()).toBe('2026-11-06');
   });
 
   it('treats a key it cannot parse as today rather than NaN', () => {

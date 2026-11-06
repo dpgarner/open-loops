@@ -34,13 +34,11 @@ export function formatDate(iso: string | null): string {
 
 // ---------- tickler ----------
 
-/** Today as a local date-only key, so "due today" changes at local midnight. */
-export function toDateKey(d: Date = new Date()): string {
+/** A local date-only key (YYYY-MM-DD), so "due today" changes at local midnight. */
+export function toDateKey(d: Date): string {
   const p = (n: number) => String(n).padStart(2, '0');
   return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
 }
-
-export const todayKey = (): string => toDateKey();
 
 /** Whole days from today to a date key: negative is overdue, 0 is today. */
 export function dayDelta(dateKey: string): number {
