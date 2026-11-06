@@ -18,6 +18,9 @@ logic (including the midnight boundary). `npm run test:watch` keeps it running, 
 `npm run test:coverage` prints a coverage table and writes a browsable report to
 `coverage/` (git-ignored).
 
+GitHub Actions runs `npm test` and `npm run build` on every push to `main` — see
+`.github/workflows/ci.yml`.
+
 ## Which problem each screen solves
 
 - **Capture** — the bar sits on every screen; `Enter` files it to the inbox, and
