@@ -1,0 +1,3 @@
+# Keep line endings identical on every checkout: the guide's generated blocks are
+# compared byte-for-byte by the tests and scripts/docs.cjs --check.
+* text=auto eol=lf

@@ -16,9 +16,15 @@ concurrency:
 
 jobs:
   test-and-build:
-    name: Test and build
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
+    name: Test and build (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    strategy:
+      # Report both platforms even when one fails.
+      fail-fast: false
+      matrix:
+        # The app is developed on Windows and published from Linux.
+        os: [ubuntu-latest, windows-latest]
     steps:
       - name: Check out the repository
         uses: actions/checkout@v4
