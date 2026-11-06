@@ -2,6 +2,14 @@ import type { AppState } from './types';
 
 const daysAgo = (n: number): string => new Date(Date.now() - n * 86_400_000).toISOString();
 
+/** Date-only key offset by whole days, which is what tickler dates are. */
+export function dateKey(offsetDays: number): string {
+  const d = new Date();
+  d.setDate(d.getDate() + offsetDays);
+  const p = (n: number) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
+}
+
 export const CONTEXTS = ['@calls', '@computer', '@errands', '@home'];
 
 export function emptyState(): AppState {
@@ -20,7 +28,8 @@ export function emptyState(): AppState {
 /**
  * A small but realistic set: a team offsite, a flaky-checkout project, and two
  * waiting-for items. It exists so inbox zero and the review flow can be tried
- * immediately, and so the "stuck project" state is visible once, on purpose.
+ * immediately, and so the tickler has something to show — one overdue action,
+ * one action due in three days, an overdue idea and one due next week.
  */
 export function seedState(): AppState {
   return {
@@ -60,6 +69,7 @@ export function seedState(): AppState {
         done: false,
         doneAt: null,
         createdAt: daysAgo(8),
+        ticklerDate: null,
       },
       {
         id: 'a-venue',
@@ -69,6 +79,7 @@ export function seedState(): AppState {
         done: false,
         doneAt: null,
         createdAt: daysAgo(7),
+        ticklerDate: null,
       },
       {
         id: 'a-dana',
@@ -78,6 +89,7 @@ export function seedState(): AppState {
         done: false,
         doneAt: null,
         createdAt: daysAgo(6),
+        ticklerDate: null,
       },
       {
         id: 'a-repro',
@@ -87,6 +99,7 @@ export function seedState(): AppState {
         done: false,
         doneAt: null,
         createdAt: daysAgo(3),
+        ticklerDate: null,
       },
       {
         id: 'a-logs',
@@ -96,6 +109,7 @@ export function seedState(): AppState {
         done: false,
         doneAt: null,
         createdAt: daysAgo(2),
+        ticklerDate: null,
       },
       {
         id: 'a-keyboard',
@@ -105,6 +119,7 @@ export function seedState(): AppState {
         done: false,
         doneAt: null,
         createdAt: daysAgo(5),
+        ticklerDate: null,
       },
       {
         id: 'a-dentist',
@@ -114,6 +129,27 @@ export function seedState(): AppState {
         done: false,
         doneAt: null,
         createdAt: daysAgo(11),
+        ticklerDate: null,
+      },
+      {
+        id: 'a-domain',
+        title: 'Renew the domain before it lapses',
+        context: '@computer',
+        projectId: null,
+        done: false,
+        doneAt: null,
+        createdAt: daysAgo(12),
+        ticklerDate: dateKey(-2),
+      },
+      {
+        id: 'a-invoice',
+        title: 'Chase the venue about the invoice',
+        context: '@calls',
+        projectId: 'p-offsite',
+        done: false,
+        doneAt: null,
+        createdAt: daysAgo(1),
+        ticklerDate: dateKey(3),
       },
       {
         id: 'a-dates',
@@ -123,6 +159,7 @@ export function seedState(): AppState {
         done: true,
         doneAt: daysAgo(4),
         createdAt: daysAgo(10),
+        ticklerDate: null,
       },
     ],
     waiting: [
@@ -147,12 +184,14 @@ export function seedState(): AppState {
         title: 'Learn to sail',
         note: 'A two-day course somewhere coastal, once the offsite is done.',
         createdAt: daysAgo(20),
+        remindOn: dateKey(-1),
       },
       {
         id: 's-essay',
         title: 'Write the “small tools” essay',
         note: 'The one about programs that do one job and outlive their authors.',
         createdAt: daysAgo(30),
+        remindOn: dateKey(7),
       },
     ],
     inbox: [

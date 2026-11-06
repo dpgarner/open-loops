@@ -9,6 +9,7 @@ import NextActionsView from './components/NextActionsView';
 import ProjectsView from './components/ProjectsView';
 import WaitingForView from './components/WaitingForView';
 import SomedayView from './components/SomedayView';
+import TicklerView from './components/TicklerView';
 import ReviewView from './components/ReviewView';
 
 const TITLES: Record<Tab, string> = {
@@ -17,6 +18,7 @@ const TITLES: Record<Tab, string> = {
   projects: 'Projects',
   waiting: 'Waiting for',
   someday: 'Someday / maybe',
+  tickler: 'Tickler',
   review: 'Weekly review',
 };
 
@@ -26,6 +28,7 @@ const HINTS: Record<Tab, string> = {
   projects: 'Every active outcome needs a next action, or it is stuck.',
   waiting: 'What other people owe you, and how long it has been.',
   someday: 'Parked deliberately — revisit it in the weekly review.',
+  tickler: 'Dated actions and ideas that resurface on their day.',
   review: 'Get clear, get current, get creative, wrap up.',
 };
 
@@ -89,6 +92,7 @@ export default function App() {
           {tab === 'projects' && <ProjectsView />}
           {tab === 'waiting' && <WaitingForView />}
           {tab === 'someday' && <SomedayView />}
+          {tab === 'tickler' && <TicklerView />}
           {tab === 'review' && <ReviewView onGoTo={setTab} />}
         </section>
       </main>

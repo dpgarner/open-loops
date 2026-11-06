@@ -1,7 +1,7 @@
 // The GTD model: an inbox you process, actions that are next physical steps,
 // projects that are outcomes, and the lists that hold everything else.
 
-export type Tab = 'inbox' | 'next' | 'projects' | 'waiting' | 'someday' | 'review';
+export type Tab = 'inbox' | 'next' | 'projects' | 'waiting' | 'someday' | 'tickler' | 'review';
 
 export type ProjectStatus = 'active' | 'on-hold' | 'completed';
 
@@ -33,6 +33,8 @@ export interface Action {
   done: boolean;
   doneAt: string | null;
   createdAt: string;
+  /** Date-only key (YYYY-MM-DD). While in the future the action is deferred. */
+  ticklerDate: string | null;
 }
 
 export interface WaitingItem {
@@ -48,6 +50,8 @@ export interface SomedayItem {
   title: string;
   note: string;
   createdAt: string;
+  /** Date-only key (YYYY-MM-DD) on which this idea should resurface. */
+  remindOn: string | null;
 }
 
 export interface AppState {

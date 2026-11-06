@@ -13,13 +13,15 @@ export default function NextActionForm({ projectId, onDone, placeholder }: Props
   const store = useStore();
   const [title, setTitle] = useState('');
   const [context, setContext] = useState(store.state.contexts[0] ?? '@computer');
+  const [date, setDate] = useState('');
 
   function submit(event: FormEvent) {
     event.preventDefault();
     if (!title.trim()) return;
-    if (projectId) store.defineNextAction(projectId, { title, context });
-    else store.addAction({ title, context, projectId: null });
+    if (projectId) store.defineNextAction(projectId, { title, context, ticklerDate: date || null });
+    else store.addAction({ title, context, projectId: null, ticklerDate: date || null });
     setTitle('');
+    setDate('');
     onDone?.();
   }
 
@@ -38,6 +40,13 @@ export default function NextActionForm({ projectId, onDone, placeholder }: Props
           </option>
         ))}
       </select>
+      <input
+        type="date"
+        className="input date"
+        value={date}
+        aria-label="Resurface on"
+        onChange={(e) => setDate(e.target.value)}
+      />
       <button type="submit" className="btn small">
         Add
       </button>

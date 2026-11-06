@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import type { Tab } from '../types';
 import { useStore } from '../store-context';
-import { activeProjects, openActions } from '../selectors';
+import { activeProjects, availableActions, ticklerDueCount } from '../selectors';
 
 interface Props {
   tab: Tab;
@@ -16,10 +16,16 @@ export default function Sidebar({ tab, onTab, reviewDue }: Props) {
 
   const items: Array<{ id: Tab; label: string; count: number | null; badge?: boolean }> = [
     { id: 'inbox', label: 'Inbox', count: state.inbox.length, badge: state.inbox.length > 0 },
-    { id: 'next', label: 'Next actions', count: openActions(state).length },
+    { id: 'next', label: 'Next actions', count: availableActions(state).length },
     { id: 'projects', label: 'Projects', count: activeProjects(state).length },
     { id: 'waiting', label: 'Waiting for', count: state.waiting.length },
     { id: 'someday', label: 'Someday / maybe', count: state.someday.length },
+    {
+      id: 'tickler',
+      label: 'Tickler',
+      count: ticklerDueCount(state) || null,
+      badge: ticklerDueCount(state) > 0,
+    },
     { id: 'review', label: 'Weekly review', count: null, badge: reviewDue },
   ];
 

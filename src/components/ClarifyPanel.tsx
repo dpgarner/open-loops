@@ -28,6 +28,7 @@ export default function ClarifyPanel({ inboxId, text, mode, onDone }: Props) {
   const [firstAction, setFirstAction] = useState('');
   const [person, setPerson] = useState('');
   const [note, setNote] = useState('');
+  const [date, setDate] = useState('');
 
   const active = store.state.projects.filter((p) => p.status === 'active');
 
@@ -35,13 +36,18 @@ export default function ClarifyPanel({ inboxId, text, mode, onDone }: Props) {
     event.preventDefault();
     if (!title.trim()) return;
     if (mode === 'action') {
-      store.clarifyNextAction(inboxId, { title, context, projectId: projectId || null });
+      store.clarifyNextAction(inboxId, {
+        title,
+        context,
+        projectId: projectId || null,
+        ticklerDate: date || null,
+      });
     } else if (mode === 'project') {
       store.clarifyProject(inboxId, { title, outcome, firstActionTitle: firstAction, context });
     } else if (mode === 'waiting') {
       store.clarifyWaiting(inboxId, { title, person });
     } else {
-      store.clarifySomeday(inboxId, title, note);
+      store.clarifySomeday(inboxId, title, note, date || null);
     }
     onDone();
   }
@@ -134,6 +140,18 @@ export default function ClarifyPanel({ inboxId, text, mode, onDone }: Props) {
             value={note}
             placeholder="Why it is parked"
             onChange={(e) => setNote(e.target.value)}
+          />
+        </label>
+      )}
+
+      {(mode === 'action' || mode === 'someday') && (
+        <label className="field">
+          <span>{mode === 'action' ? 'Resurface on (optional)' : 'Remind me on (optional)'}</span>
+          <input
+            type="date"
+            className="input date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
           />
         </label>
       )}

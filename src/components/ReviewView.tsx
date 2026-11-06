@@ -1,7 +1,17 @@
 import { useState } from 'react';
 import type { Tab } from '../types';
 import { useStore } from '../store-context';
-import { activeProjects, daysSince, formatDate, isStuck, nextActionFor } from '../selectors';
+import {
+  activeProjects,
+  daysSince,
+  dueActions,
+  dueLabel,
+  dueSomeday,
+  formatDate,
+  isStuck,
+  nextActionFor,
+  nextWeekKey,
+} from '../selectors';
 import ClarifyPanel, { type ClarifyMode } from './ClarifyPanel';
 import NextActionForm from './NextActionForm';
 
@@ -22,6 +32,9 @@ export default function ReviewView({ onGoTo }: { onGoTo: (tab: Tab) => void }) {
 
   const projects = activeProjects(state);
   const stuck = projects.filter((p) => isStuck(state, p.id));
+  const dueList = dueActions(state);
+  const dueIdeas = dueSomeday(state);
+  const dueTotal = dueList.length + dueIdeas.length;
   const openCount = state.actions.filter((a) => !a.done).length;
   const progress = ((step + 1) / STEPS.length) * 100;
 
@@ -168,6 +181,66 @@ export default function ReviewView({ onGoTo }: { onGoTo: (tab: Tab) => void }) {
 
           <section className="group">
             <h2 className="group-head">
+              Tickler <span className="meta">{dueTotal} due</span>
+            </h2>
+            {dueTotal === 0 ? (
+              <p className="ok">Nothing has come due — nothing to resurface or push out.</p>
+            ) : (
+              <ul className="rows tight">
+                {dueList.map((action) => (
+                  <li key={action.id} className="row card due">
+                    <div className="item-main">
+                      <span className="item-title">{action.title}</span>
+                      <span className="meta late">
+                        {action.ticklerDate ? dueLabel(action.ticklerDate) : ''} · {action.context}
+                      </span>
+                    </div>
+                    <div className="btn-row">
+                      <button
+                        type="button"
+                        className="btn tiny"
+                        onClick={() => store.setActionDate(action.id, nextWeekKey())}
+                      >
+                        Push a week
+                      </button>
+                      <button
+                        type="button"
+                        className="btn tiny ghost"
+                        onClick={() => store.setActionDate(action.id, null)}
+                      >
+                        Clear
+                      </button>
+                    </div>
+                  </li>
+                ))}
+                {dueIdeas.map((idea) => (
+                  <li key={idea.id} className="row card due">
+                    <div className="item-main">
+                      <span className="item-title">{idea.title}</span>
+                      <span className="meta late">
+                        someday · {idea.remindOn ? dueLabel(idea.remindOn) : ''}
+                      </span>
+                    </div>
+                    <div className="btn-row">
+                      <button type="button" className="btn tiny" onClick={() => store.promoteSomeday(idea.id)}>
+                        Move to inbox
+                      </button>
+                      <button
+                        type="button"
+                        className="btn tiny ghost"
+                        onClick={() => store.setSomedayDate(idea.id, nextWeekKey())}
+                      >
+                        Push a week
+                      </button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+
+          <section className="group">
+            <h2 className="group-head">
               Someday / maybe <span className="meta">{state.someday.length} parked</span>
             </h2>
             <p className="meta">Anything still pulling at you should move to the inbox — do that in the Someday list.</p>
@@ -238,6 +311,10 @@ export default function ReviewView({ onGoTo }: { onGoTo: (tab: Tab) => void }) {
             <div className={stuck.length ? 'bad' : ''}>
               <strong>{stuck.length}</strong>
               <span>stuck projects</span>
+            </div>
+            <div className={dueTotal ? 'bad' : ''}>
+              <strong>{dueTotal}</strong>
+              <span>due from the tickler</span>
             </div>
             <div>
               <strong>{state.waiting.length}</strong>

@@ -30,6 +30,14 @@ error fails the build rather than shipping.
   waiting, with **Received** to clear it.
 - **Someday / maybe** — parked ideas with a reason; promote one back to the inbox
   when it starts pulling at you.
+- **Tickler** — the ⏱ control on any action or someday idea sets a date. A dated
+  action leaves its context list and sits in **Deferred** until the morning of
+  that day, then returns on its own; a dated idea keeps its place on the someday
+  list but stops needing to be checked by hand. The Tickler view collects what
+  has come **due now** (tick it off, promote it, push it out a week) and what is
+  **upcoming**, grouped by day. Its sidebar count only appears when something is
+  actually due, so a quiet tickler stays quiet. The weekly review has a tickler
+  block in *get current* and a due figure in the wrap-up.
 - **Weekly review** — four steps with a progress bar: *get clear* (process the
   inbox inline), *get current* (every project's next action, the waiting-for
   list, the someday list), *get creative* (a dump box plus prompts that can file
@@ -38,6 +46,9 @@ error fails the build rather than shipping.
   once seven days have passed.
 
 ## Data
+
+Tickler dates are stored as local date-only keys (`YYYY-MM-DD`), so "due today"
+changes at local midnight rather than drifting with a stored timestamp.
 
 Everything lives in this browser. `Export` downloads a JSON backup and `Import`
 restores one; **Demo data** reloads the seeded example set (a team offsite, a

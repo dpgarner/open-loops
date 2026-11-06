@@ -16,16 +16,25 @@ function uid(prefix: string): string {
 
 const now = (): string => new Date().toISOString();
 
+/** Only a real date-only key is accepted, so a stray value cannot poison comparisons. */
+function dateOrNull(value: unknown): string | null {
+  return typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value) ? value : null;
+}
+
 function normalize(raw: unknown): AppState {
   const base = emptyState();
   if (!raw || typeof raw !== 'object') return base;
   const r = raw as Partial<AppState>;
   return {
     inbox: Array.isArray(r.inbox) ? r.inbox : [],
-    actions: Array.isArray(r.actions) ? r.actions : [],
+    actions: Array.isArray(r.actions)
+      ? r.actions.map((a) => ({ ...a, ticklerDate: dateOrNull(a.ticklerDate) }))
+      : [],
     projects: Array.isArray(r.projects) ? r.projects : [],
     waiting: Array.isArray(r.waiting) ? r.waiting : [],
-    someday: Array.isArray(r.someday) ? r.someday : [],
+    someday: Array.isArray(r.someday)
+      ? r.someday.map((i) => ({ ...i, remindOn: dateOrNull(i.remindOn) }))
+      : [],
     contexts: Array.isArray(r.contexts) && r.contexts.length ? r.contexts : base.contexts,
     lastReview: typeof r.lastReview === 'string' ? r.lastReview : null,
     reviews: Array.isArray(r.reviews) ? r.reviews : [],
@@ -67,22 +76,41 @@ export interface StoreApi {
   capture(text: string): void;
   trashInbox(id: string): void;
   handleInbox(id: string): void;
-  clarifyNextAction(id: string, step: { title: string; context: string; projectId: string | null }): void;
+  clarifyNextAction(
+    id: string,
+    step: { title: string; context: string; projectId: string | null; ticklerDate?: string | null },
+  ): void;
   clarifyProject(
     id: string,
-    project: { title: string; outcome: string; firstActionTitle: string; context: string },
+    project: {
+      title: string;
+      outcome: string;
+      firstActionTitle: string;
+      context: string;
+      firstActionDate?: string | null;
+    },
   ): void;
   clarifyWaiting(id: string, item: { title: string; person: string }): void;
-  clarifySomeday(id: string, title: string, note: string): void;
-  addAction(input: { title: string; context: string; projectId: string | null }): void;
+  clarifySomeday(id: string, title: string, note: string, remindOn?: string | null): void;
+  addAction(input: {
+    title: string;
+    context: string;
+    projectId: string | null;
+    ticklerDate?: string | null;
+  }): void;
   toggleAction(id: string): void;
   deleteAction(id: string): void;
+  setActionDate(id: string, date: string | null): void;
   addContext(name: string): void;
   addProject(input: { title: string; outcome: string }): void;
   setProjectStatus(id: string, status: ProjectStatus): void;
-  defineNextAction(projectId: string, input: { title: string; context: string }): void;
+  defineNextAction(
+    projectId: string,
+    input: { title: string; context: string; ticklerDate?: string | null },
+  ): void;
   receiveWaiting(id: string): void;
-  addSomeday(title: string, note: string): void;
+  addSomeday(title: string, note: string, remindOn?: string | null): void;
+  setSomedayDate(id: string, date: string | null): void;
   promoteSomeday(id: string): void;
   deleteSomeday(id: string): void;
   completeReview(): void;
@@ -144,6 +172,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
               done: false,
               doneAt: null,
               createdAt: now(),
+              ticklerDate: dateOrNull(step.ticklerDate),
             },
           ],
           contexts: s.contexts.includes(step.context) ? s.contexts : [...s.contexts, step.context],
@@ -178,6 +207,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
                   done: false,
                   doneAt: null,
                   createdAt: now(),
+                  ticklerDate: dateOrNull(project.firstActionDate),
                 },
               ]
             : s.actions,
@@ -196,11 +226,20 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         }));
       },
 
-      clarifySomeday(id, title, note) {
+      clarifySomeday(id, title, note, remindOn) {
         apply((s) => ({
           ...s,
           inbox: s.inbox.filter((i) => i.id !== id),
-          someday: [...s.someday, { id: uid('s'), title: title.trim(), note: note.trim(), createdAt: now() }],
+          someday: [
+            ...s.someday,
+            {
+              id: uid('s'),
+              title: title.trim(),
+              note: note.trim(),
+              createdAt: now(),
+              remindOn: dateOrNull(remindOn),
+            },
+          ],
         }));
       },
 
@@ -219,6 +258,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
               done: false,
               doneAt: null,
               createdAt: now(),
+              ticklerDate: dateOrNull(input.ticklerDate),
             },
           ],
           contexts: s.contexts.includes(input.context) ? s.contexts : [...s.contexts, input.context],
@@ -236,6 +276,13 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
       deleteAction(id) {
         apply((s) => ({ ...s, actions: s.actions.filter((a) => a.id !== id) }));
+      },
+
+      setActionDate(id, date) {
+        apply((s) => ({
+          ...s,
+          actions: s.actions.map((a) => (a.id === id ? { ...a, ticklerDate: dateOrNull(date) } : a)),
+        }));
       },
 
       addContext(name) {
@@ -295,6 +342,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
               done: false,
               doneAt: null,
               createdAt: now(),
+              ticklerDate: dateOrNull(input.ticklerDate),
             },
           ],
           contexts: s.contexts.includes(input.context) ? s.contexts : [...s.contexts, input.context],
@@ -305,12 +353,22 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         apply((s) => ({ ...s, waiting: s.waiting.filter((w) => w.id !== id) }));
       },
 
-      addSomeday(title, note) {
+      addSomeday(title, note, remindOn) {
         const value = title.trim();
         if (!value) return;
         apply((s) => ({
           ...s,
-          someday: [...s.someday, { id: uid('s'), title: value, note: note.trim(), createdAt: now() }],
+          someday: [
+            ...s.someday,
+            { id: uid('s'), title: value, note: note.trim(), createdAt: now(), remindOn: dateOrNull(remindOn) },
+          ],
+        }));
+      },
+
+      setSomedayDate(id, date) {
+        apply((s) => ({
+          ...s,
+          someday: s.someday.map((i) => (i.id === id ? { ...i, remindOn: dateOrNull(date) } : i)),
         }));
       },
 
@@ -387,4 +445,3 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   return <StoreContext.Provider value={api}>{children}</StoreContext.Provider>;
 }
-
