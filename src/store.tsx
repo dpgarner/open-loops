@@ -31,6 +31,18 @@ function normalize(raw: unknown): AppState {
   };
 }
 
+/**
+ * An import has to be recognisably one of our own exports. `normalize` fills in
+ * any missing list with an empty array, so without this check a foreign JSON
+ * file (or an unrelated backup the user picked by mistake) would replace a live
+ * system with empty lists and look like it succeeded.
+ */
+function looksLikeExport(raw: unknown): raw is Partial<AppState> {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return false;
+  const lists = ['inbox', 'actions', 'projects', 'waiting', 'someday'];
+  return lists.some((key) => Array.isArray((raw as Record<string, unknown>)[key]));
+}
+
 function load(): AppState {
   try {
     const raw = localStorage.getItem(KEY);
@@ -331,7 +343,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         file
           .text()
           .then((text) => {
-            setState(normalize(JSON.parse(text)));
+            const parsed: unknown = JSON.parse(text);
+            if (!looksLikeExport(parsed)) return;
+            setState(normalize(parsed));
           })
           .catch(() => {
             // Importing a non-JSON file should do nothing rather than wipe the store.
