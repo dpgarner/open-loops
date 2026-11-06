@@ -1,5 +1,6 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import Sidebar from '../src/components/Sidebar';
+import HelpPanel from '../src/components/HelpPanel';
 import { StoreProvider } from '../src/store';
 import { buildLabel } from '../src/build';
 
@@ -61,6 +62,17 @@ describe('build stamp', () => {
   it('still reads sensibly when the build came from a source zip with no commit', () => {
     expect(buildLabel({ id: 'abc123', at: '2026-01-02T03:04:05.000Z', commit: null, commitUrl: null })).toBe(
       'Build abc123 · 2026-01-02 03:04 UTC',
+    );
+  });
+
+  it('shows the same build, linked, inside the in-app help', () => {
+    render(<HelpPanel onClose={jest.fn()} />);
+    const dialog = screen.getByRole('dialog');
+
+    const link = within(dialog).getByRole('link');
+    expect(link.textContent).toBe('Build testbuild · be6f971 · 2026-11-06 14:32 UTC');
+    expect(link.getAttribute('href')).toBe(
+      'https://github.com/dpgarner/open-loops/commit/be6f971c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f60',
     );
   });
 

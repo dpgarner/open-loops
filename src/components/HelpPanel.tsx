@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { build, buildLabel } from '../build';
 
 interface Props {
   onClose: () => void;
@@ -161,6 +162,30 @@ export default function HelpPanel({ onClose }: Props) {
               <strong>Careful:</strong> Demo data replaces your lists immediately, without asking.
               Clearing browsing data, a private window, another browser or another address means
               starting empty — an export is the only backup.
+            </p>
+          </section>
+
+          <section className="help-section">
+            <h3>Version and updates</h3>
+            <p>
+              The line at the bottom of the sidebar names the build you are running, shown here
+              as{' '}
+              <code>
+                {build?.commitUrl ? (
+                  <a href={build.commitUrl} target="_blank" rel="noreferrer">
+                    {buildLabel(build)}
+                  </a>
+                ) : (
+                  buildLabel(build)
+                )}
+              </code>{' '}
+              — its short commit links to that exact change on GitHub, and "Development build"
+              means the dev server is serving the page.
+            </p>
+            <p>
+              When a newer build downloads, a banner appears at the bottom of the window. Nothing
+              changes until you press <strong>Reload</strong>, so a half-typed capture is safe; the
+              × dismisses the notice until next time.
             </p>
           </section>
 

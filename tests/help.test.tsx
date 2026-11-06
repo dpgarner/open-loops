@@ -44,7 +44,7 @@ describe('help dialog', () => {
     expect(document.getElementById(id as string)?.textContent).toBe('How this works');
   });
 
-  it('carries the guide sections: terms, inbox choices, dates, data, shortcuts', () => {
+  it('carries the guide sections: terms, inbox choices, dates, data, version, shortcuts', () => {
     render(<HelpPanel onClose={jest.fn()} />);
     const dialog = screen.getByRole('dialog');
 
@@ -53,6 +53,7 @@ describe('help dialog', () => {
       'Emptying the inbox',
       'Dates',
       'Your data',
+      'Version and updates',
       'Shortcuts',
     ]);
     expect(dialog.querySelectorAll('.terms dt')).toHaveLength(9);
@@ -61,6 +62,17 @@ describe('help dialog', () => {
     // a header row plus c, Enter, Tab and Space
     expect(within(dialog).getAllByRole('row')).toHaveLength(5);
     expect(within(dialog).getAllByText('c', { selector: 'kbd' })).toHaveLength(1);
+  });
+
+  it('says where to find the build, and how an update arrives', () => {
+    render(<HelpPanel onClose={jest.fn()} />);
+    const dialog = screen.getByRole('dialog');
+    const heading = within(dialog).getByRole('heading', { name: 'Version and updates' });
+    const section = heading.closest('section');
+
+    expect(section?.textContent).toContain('Development build');
+    expect(section?.textContent).toContain('Reload');
+    expect(section?.textContent).toContain('dismisses the notice');
   });
 
   it('moves focus to Close when it opens', () => {
