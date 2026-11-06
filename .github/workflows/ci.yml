@@ -43,7 +43,8 @@ jobs:
         run: npm run docs:check
 
       - name: Run the Jest suite
-        run: npm test
+        # Coverage turns on the thresholds in jest.config.cjs.
+        run: npm run test:coverage
 
       - name: Type-check and build
         run: npm run build

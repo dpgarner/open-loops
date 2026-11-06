@@ -13,4 +13,15 @@ module.exports = {
   collectCoverageFrom: ['src/**/*.{ts,tsx}', '!src/main.tsx'],
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'html'],
+  // A floor just under today's numbers, so a change that loses coverage fails the
+  // run instead of quietly shrinking what the suite proves. Raise them as coverage
+  // improves; CI runs `npm run test:coverage`, which is where they are enforced.
+  coverageThreshold: {
+    global: {
+      statements: 67,
+      branches: 52,
+      functions: 63,
+      lines: 66,
+    },
+  },
 };
