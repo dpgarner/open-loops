@@ -5,11 +5,13 @@ import {
   dueActions,
   dueLabel,
   dueSomeday,
+  formatDay,
   isDeferred,
   isDue,
   nextWeekKey,
   ticklerDueCount,
   toDateKey,
+  todayKey,
   upcomingTickler,
 } from '../src/selectors';
 import { emptyState } from '../src/seed';
@@ -57,6 +59,7 @@ beforeEach(() => {
 
 afterEach(() => {
   jest.useRealTimers();
+  jest.restoreAllMocks();
 });
 
 describe('date keys', () => {
@@ -92,6 +95,48 @@ describe('date keys', () => {
 
   it('nextWeekKey is seven days out', () => {
     expect(nextWeekKey()).toBe(at(7));
+  });
+
+  it('defaults to today, which todayKey repeats', () => {
+    expect(toDateKey()).toBe('2026-11-06');
+    expect(todayKey()).toBe('2026-11-06');
+  });
+
+  it('treats a key it cannot parse as today rather than NaN', () => {
+    expect(dayDelta('')).toBe(0);
+    expect(dayDelta('nonsense')).toBe(0);
+    expect(dayDelta('2026-11')).toBe(0);
+    expect(dayDelta('2026-00-00')).toBe(0);
+  });
+});
+
+describe('day headings', () => {
+  const options: Intl.DateTimeFormatOptions = {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+  };
+
+  it('formats a key as a short local weekday and day', () => {
+    // Locale-dependent wording makes an exact string brittle, so the assertion is
+    // against this machine's own formatting of the same local date; what is
+    // really being pinned is that the key is read as a local day, not a UTC one.
+    const expected = new Date(2026, 10, 10).toLocaleDateString(undefined, options);
+    const spy = jest.spyOn(Date.prototype, 'toLocaleDateString');
+
+    const label = formatDay('2026-11-10');
+
+    expect(label).toBe(expected);
+    // jest types mock instances as the return type, but the spy is called on a Date.
+    const used = spy.mock.instances[0] as unknown as Date;
+    expect([used.getFullYear(), used.getMonth(), used.getDate()]).toEqual([2026, 10, 10]);
+    expect(spy).toHaveBeenCalledWith(undefined, options);
+  });
+
+  it('keeps single-digit months and days on their own day', () => {
+    expect(formatDay('2026-01-05')).toBe(
+      new Date(2026, 0, 5).toLocaleDateString(undefined, options),
+    );
   });
 });
 
@@ -197,6 +242,22 @@ describe('what each list shows', () => {
     expect(days[0].someday.map((i) => i.id)).toEqual(['ideaSoon']);
     expect(days[1].actions).toHaveLength(0);
     expect(days[2].actions.map((a) => a.id)).toEqual(['later']);
+  });
+
+  it('ignores undated ideas while grouping the dated ones', () => {
+    const state = makeState({
+      actions: [makeAction({ id: 'action', ticklerDate: at(4) })],
+      someday: [
+        makeIdea({ id: 'undated', remindOn: null }),
+        makeIdea({ id: 'dated', remindOn: at(4) }),
+      ],
+    });
+
+    const days = upcomingTickler(state);
+    expect(days).toHaveLength(1);
+    expect(days[0].date).toBe(at(4));
+    expect(days[0].actions.map((a) => a.id)).toEqual(['action']);
+    expect(days[0].someday.map((i) => i.id)).toEqual(['dated']);
   });
 
   it('has nothing upcoming when everything is undated or done', () => {
