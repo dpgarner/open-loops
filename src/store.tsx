@@ -3,8 +3,7 @@ import type { ReactNode } from 'react';
 import type { AppState, ProjectStatus } from './types';
 import { emptyState, seedState } from './seed';
 import { StoreContext } from './store-context';
-
-const KEY = 'open-loops.v1';
+import { STORAGE_KEY, dateOrNull, looksLikeExport, normalize } from './store-data';
 
 function uid(prefix: string): string {
   const rand =
@@ -16,46 +15,9 @@ function uid(prefix: string): string {
 
 const now = (): string => new Date().toISOString();
 
-/** Only a real date-only key is accepted, so a stray value cannot poison comparisons. */
-function dateOrNull(value: unknown): string | null {
-  return typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value) ? value : null;
-}
-
-function normalize(raw: unknown): AppState {
-  const base = emptyState();
-  if (!raw || typeof raw !== 'object') return base;
-  const r = raw as Partial<AppState>;
-  return {
-    inbox: Array.isArray(r.inbox) ? r.inbox : [],
-    actions: Array.isArray(r.actions)
-      ? r.actions.map((a) => ({ ...a, ticklerDate: dateOrNull(a.ticklerDate) }))
-      : [],
-    projects: Array.isArray(r.projects) ? r.projects : [],
-    waiting: Array.isArray(r.waiting) ? r.waiting : [],
-    someday: Array.isArray(r.someday)
-      ? r.someday.map((i) => ({ ...i, remindOn: dateOrNull(i.remindOn) }))
-      : [],
-    contexts: Array.isArray(r.contexts) && r.contexts.length ? r.contexts : base.contexts,
-    lastReview: typeof r.lastReview === 'string' ? r.lastReview : null,
-    reviews: Array.isArray(r.reviews) ? r.reviews : [],
-  };
-}
-
-/**
- * An import has to be recognisably one of our own exports. `normalize` fills in
- * any missing list with an empty array, so without this check a foreign JSON
- * file (or an unrelated backup the user picked by mistake) would replace a live
- * system with empty lists and look like it succeeded.
- */
-function looksLikeExport(raw: unknown): raw is Partial<AppState> {
-  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return false;
-  const lists = ['inbox', 'actions', 'projects', 'waiting', 'someday'];
-  return lists.some((key) => Array.isArray((raw as Record<string, unknown>)[key]));
-}
-
 function load(): AppState {
   try {
-    const raw = localStorage.getItem(KEY);
+    const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) return normalize(JSON.parse(raw));
   } catch {
     // A corrupt or unavailable store must not stop the app from opening.
@@ -126,7 +88,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     try {
-      localStorage.setItem(KEY, JSON.stringify(state));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     } catch {
       // Private-mode quota failures are not worth interrupting capture over.
     }
