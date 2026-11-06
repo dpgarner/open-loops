@@ -110,10 +110,13 @@ export default function TicklerView() {
                   <li key={action.id} className="row card">
                     <label className="check">
                       <input type="checkbox" checked={false} onChange={() => store.toggleAction(action.id)} />
-                      <span className="item-title">{action.title}</span>
-                      <span className="chip">{action.context}</span>
+                      <span className="item-main">
+                        <span className="item-title">{action.title}</span>
+                        <span className="meta">
+                          {action.context} · held back until this day
+                        </span>
+                      </span>
                     </label>
-                    <span className="meta">deferred until then</span>
                   </li>
                 ))}
                 {day.someday.map((idea) => (
@@ -121,7 +124,7 @@ export default function TicklerView() {
                     <div className="item-main">
                       <span className="item-title">{idea.title}</span>
                       <span className="meta">
-                        <span className="kind">someday</span> resurfaces
+                        <span className="kind">someday</span> resurfaces on this day
                       </span>
                     </div>
                   </li>

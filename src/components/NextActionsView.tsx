@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { useStore } from '../store-context';
-import { availableActions, deferredActions, dueLabel, formatDay } from '../selectors';
+import { availableActions, deferredActions, dueLabel } from '../selectors';
 import TicklerControl from './TicklerControl';
 
 export default function NextActionsView() {
@@ -154,9 +154,7 @@ export default function NextActionsView() {
                   <span className="chip">{a.context}</span>
                 </label>
                 <div className="item-side">
-                  <span className="meta">
-                    resurfaces {formatDay(a.ticklerDate ?? '')} · {dueLabel(a.ticklerDate ?? '')}
-                  </span>
+                  <span className="meta">resurfaces {dueLabel(a.ticklerDate ?? '')}</span>
                   <TicklerControl date={a.ticklerDate} onChange={(d) => store.setActionDate(a.id, d)} />
                 </div>
               </li>

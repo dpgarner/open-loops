@@ -1,4 +1,6 @@
 :root {
+  /* Dark native controls: without this, checkboxes and date pickers paint white. */
+  color-scheme: dark;
   --bg: #10131a;
   --bg-soft: #161b24;
   --card: #1a202b;
@@ -126,7 +128,8 @@ body {
 }
 
 .nav-item.on .nav-count {
-  background: #2f4considered;
+  background: #2f4460;
+  color: #dce9fb;
 }
 
 .side-foot {
@@ -703,6 +706,15 @@ body {
   display: inline-flex;
 }
 
+.tickler .btn.ghost {
+  color: #a9b7ca;
+  font-size: 13px;
+}
+
+.tickler .btn.ghost:hover {
+  color: var(--text);
+}
+
 .btn.ghost.dated {
   color: var(--accent);
 }
@@ -713,8 +725,12 @@ body {
   top: calc(100% + 6px);
   z-index: 20;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 6px;
+  /* Shrink-to-fit against a 30px trigger squeezes the buttons onto two lines. */
+  width: max-content;
+  max-width: min(320px, calc(100vw - 28px));
   padding: 8px;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -732,11 +748,15 @@ body {
   background: #1f1a12;
 }
 
+.row.due .meta {
+  color: #b3c1d4;
+}
+
 .kind {
   padding: 1px 6px;
   border-radius: 4px;
   background: #232c3a;
-  color: var(--muted);
+  color: #b3c1d4;
   font-size: 10px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
