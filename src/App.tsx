@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Tab } from './types';
 import { useStore } from './store-context';
 import { formatDate, reviewIsDue } from './selectors';
@@ -11,6 +11,7 @@ import WaitingForView from './components/WaitingForView';
 import SomedayView from './components/SomedayView';
 import TicklerView from './components/TicklerView';
 import ReviewView from './components/ReviewView';
+import HelpPanel from './components/HelpPanel';
 
 const TITLES: Record<Tab, string> = {
   inbox: 'Inbox',
@@ -35,12 +36,16 @@ const HINTS: Record<Tab, string> = {
 export default function App() {
   const store = useStore();
   const [tab, setTab] = useState<Tab>('inbox');
+  const [help, setHelp] = useState(false);
+  // Stable, so the help dialog's focus and Escape handler is mounted once per opening.
+  const closeHelp = useCallback(() => setHelp(false), []);
   const captureRef = useRef<HTMLInputElement>(null);
   const due = reviewIsDue(store.state);
 
   // "c" anywhere outside a text field jumps to capture, as in the original build.
   useEffect(() => {
     function onKey(event: KeyboardEvent) {
+      if (help) return;
       if (event.key !== 'c' || event.metaKey || event.ctrlKey || event.altKey) return;
       const el = event.target as HTMLElement | null;
       const typing =
@@ -54,11 +59,11 @@ export default function App() {
     }
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, []);
+  }, [help]);
 
   return (
     <div className="shell">
-      <Sidebar tab={tab} onTab={setTab} reviewDue={due} />
+      <Sidebar tab={tab} onTab={setTab} reviewDue={due} onHelp={() => setHelp(true)} />
 
       <main className="main">
         <header className="head">
@@ -96,6 +101,8 @@ export default function App() {
           {tab === 'review' && <ReviewView onGoTo={setTab} />}
         </section>
       </main>
+
+      {help && <HelpPanel onClose={closeHelp} />}
     </div>
   );
 }

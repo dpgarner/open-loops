@@ -268,7 +268,10 @@ There is one application-wide shortcut, and it is the useful one:
 | **Tab** / **Shift+Tab** | Moves between fields and buttons, as in any web page. |
 | **Space** | Ticks or unticks a checkbox you have tabbed to. |
 
-Everything else is a click, and every button says what it does.
+Everything else is a click, and every button says what it does. If you forget any of the
+above, the **Help** button at the bottom of the sidebar opens a summary over whatever you
+were doing — the words, the inbox choices, how dates behave, the backup warning and these
+shortcuts — and **Esc** or **Close** puts you back exactly where you were.
 
 A few details that make the app quicker to live with:
 

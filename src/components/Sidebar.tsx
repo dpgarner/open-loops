@@ -7,9 +7,10 @@ interface Props {
   tab: Tab;
   onTab: (tab: Tab) => void;
   reviewDue: boolean;
+  onHelp: () => void;
 }
 
-export default function Sidebar({ tab, onTab, reviewDue }: Props) {
+export default function Sidebar({ tab, onTab, reviewDue, onHelp }: Props) {
   const store = useStore();
   const { state } = store;
   const fileRef = useRef<HTMLInputElement>(null);
@@ -106,6 +107,11 @@ export default function Sidebar({ tab, onTab, reviewDue }: Props) {
             </button>
           </p>
         )}
+        <div className="data-row">
+          <button type="button" className="btn tiny" onClick={onHelp} aria-haspopup="dialog">
+            Help
+          </button>
+        </div>
         <p className="foot-note">Stored in this browser only. Nothing leaves the machine.</p>
       </div>
     </aside>
