@@ -67,6 +67,15 @@ restores one; **Demo data** reloads the seeded example set (a team offsite, a
 flaky-checkout project, two waiting-for items) and **Clear data** empties the
 system. Nothing leaves the machine — the dev server binds loopback only.
 
+## Install and offline
+
+The production build is installable: `public/manifest.webmanifest` declares a
+standalone app with 192px and 512px icons, and `public/sw.js` precaches the shell
+plus hashed build assets so a built copy opens without a network. The worker is
+registered only in production builds (`import.meta.env.PROD`), so `npm run dev`
+stays uncached and hot reload keeps working. Rebuild to pick up a change: hashed
+asset names change, and the worker replaces its old caches on activation.
+
 ## Recovered
 
 The original build lived in an ephemeral cloud sandbox and no copy survived on

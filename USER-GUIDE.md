@@ -231,6 +231,29 @@ switch happens at your computer's local midnight, not at midnight somewhere else
 Because dates are days, they do not drift with time zones or with the time of day you set
 them.
 
+## Install it, and use it offline
+
+The app needs no account and no server of its own. Open the built app in a
+Chromium-based browser (Chrome or Edge), then use the install icon in the
+address bar, or **Install Open Loops** from the browser menu. It opens in its own
+window like a desktop app, and your data stays exactly where it was: in this
+browser's local storage.
+
+The built copy also works without a network. The first visit stores the app shell,
+its scripts, styles and icons; after that, opening it offline still shows the full
+workspace, and capturing works normally because everything is stored locally.
+Drag-and-drop and the rest of the interface are not affected.
+
+Two things worth knowing. The cache belongs to the copy you installed, so it does
+not share data with another browser or another machine — export and import JSON if
+you need to move between them. And the cache is replaced the next time you load
+the app after a rebuild, so run the build again rather than editing files in
+place.
+
+`npm run dev` deliberately has no offline cache, so hot reload behaves normally.
+Install and offline behaviour come from the production build, which `npm run preview`
+serves if you want to try it.
+
 ## Your data, backups, and how not to lose it
 
 Everything you type is saved in your browser's local storage, for the address you opened
