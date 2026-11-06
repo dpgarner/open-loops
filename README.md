@@ -14,7 +14,9 @@ error fails the build rather than shipping.
 
 `npm test` runs the Jest suite in `tests/` — the store's operations and
 persistence, the import/export path, the project rules, and the tickler date
-logic (including the midnight boundary). `npm run test:watch` keeps it running.
+logic (including the midnight boundary). `npm run test:watch` keeps it running, and
+`npm run test:coverage` prints a coverage table and writes a browsable report to
+`coverage/` (git-ignored).
 
 ## Which problem each screen solves
 
