@@ -21,6 +21,10 @@ logic (including the midnight boundary). `npm run test:watch` keeps it running, 
 GitHub Actions runs `npm test` and `npm run build` on every push to `main` — see
 `.github/workflows/ci.yml`.
 
+The shortcut table in `USER-GUIDE.md` is generated from `src/shortcuts.json`, which the
+help panel also renders — `npm run docs:shortcuts` rewrites the guide, and a test fails
+if it drifts out of date.
+
 ## Which problem each screen solves
 
 - **Capture** — the bar sits on every screen; `Enter` files it to the inbox, and

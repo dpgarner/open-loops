@@ -2,6 +2,11 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import { render, screen } from '@testing-library/react';
 import HelpPanel from '../src/components/HelpPanel';
+import SHORTCUTS from '../src/shortcuts.json';
+
+const { renderShortcutTable } = require('../scripts/shortcuts.cjs') as {
+  renderShortcutTable: (shortcuts: Array<{ keys: string; description: string }>) => string;
+};
 
 /** The first column of every row in the guide's shortcuts table. */
 function guideShortcutKeys(): string[] {
@@ -30,6 +35,13 @@ function helpShortcutKeys(): string[] {
 }
 
 describe('keyboard shortcuts in the guide and the help panel', () => {
+  it('keeps the guide table generated from the shared list', () => {
+    const markdown = readFileSync(join(__dirname, '..', 'USER-GUIDE.md'), 'utf8');
+    const table = renderShortcutTable(SHORTCUTS);
+
+    expect(markdown).toContain(`<!-- shortcuts:start -->\n${table}\n<!-- shortcuts:end -->`);
+  });
+
   it('lists the same keys in both places', () => {
     const guide = guideShortcutKeys();
     const help = helpShortcutKeys();

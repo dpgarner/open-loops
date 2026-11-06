@@ -1,0 +1,18 @@
+[
+  {
+    "keys": "c",
+    "description": "Jumps to the capture bar from anywhere, unless you are already typing in a field."
+  },
+  {
+    "keys": "Enter",
+    "description": "Files what you typed in the capture bar; in the New context box, adds the context."
+  },
+  {
+    "keys": "Tab / Shift+Tab",
+    "description": "Moves between fields and buttons, as in any web page."
+  },
+  {
+    "keys": "Space",
+    "description": "Ticks or unticks a checkbox you have tabbed to."
+  }
+]

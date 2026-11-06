@@ -14,7 +14,8 @@
     "preview": "vite preview",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "docs:shortcuts": "node scripts/shortcuts.cjs"
   },
   "dependencies": {
     "react": "^18.3.1",

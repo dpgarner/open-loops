@@ -303,12 +303,17 @@ weekly review — costs a few seconds and covers all of them.
 
 There is one application-wide shortcut, and it is the useful one:
 
+<!-- shortcuts:start -->
 | Key | What it does |
 |---|---|
 | **c** | Jumps to the capture bar from anywhere, unless you are already typing in a field. |
-| **Enter** | Files what you typed in the capture bar; in the **New context** box, adds the context. |
+| **Enter** | Files what you typed in the capture bar; in the New context box, adds the context. |
 | **Tab** / **Shift+Tab** | Moves between fields and buttons, as in any web page. |
 | **Space** | Ticks or unticks a checkbox you have tabbed to. |
+<!-- shortcuts:end -->
+
+This table and the help panel's shortcut list are generated from the same
+`src/shortcuts.json`; `npm run docs:shortcuts` rewrites it after an edit.
 
 Everything else is a click, and every button says what it does. If you forget any of the
 above, the **Help** button at the bottom of the sidebar opens a summary over whatever you

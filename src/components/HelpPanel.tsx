@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { build, buildLabel } from '../build';
+import SHORTCUTS from '../shortcuts.json';
 
 interface Props {
   onClose: () => void;
@@ -24,13 +25,6 @@ const CHOICES: Array<[string, string]> = [
   ['Someday', 'A real idea, but not now. Optionally bring it back on a date.'],
   ['Handled', 'It needed no action and no record.'],
   ['Trash', 'It was never real.'],
-];
-
-const KEYS: Array<[string, string]> = [
-  ['c', 'Jumps to the capture bar from anywhere, unless you are already typing in a field.'],
-  ['Enter', 'Files what you typed in the capture bar; adds a context in the New context box.'],
-  ['Tab / Shift+Tab', 'Moves between fields and buttons.'],
-  ['Space', 'Ticks or unticks a checkbox you have tabbed to.'],
 ];
 
 /** The short version of the user guide, over the top of whatever is open. */
@@ -199,12 +193,12 @@ export default function HelpPanel({ onClose }: Props) {
                 </tr>
               </thead>
               <tbody>
-                {KEYS.map(([key, text]) => (
-                  <tr key={key}>
+                {SHORTCUTS.map(({ keys, description }) => (
+                  <tr key={keys}>
                     <td>
-                      <kbd>{key}</kbd>
+                      <kbd>{keys}</kbd>
                     </td>
-                    <td>{text}</td>
+                    <td>{description}</td>
                   </tr>
                 ))}
               </tbody>
