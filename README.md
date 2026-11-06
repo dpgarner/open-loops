@@ -3,6 +3,9 @@
 A local-first GTD workspace: capture, clarify, organise and review in one screen.
 Vite + React + TypeScript, `localStorage` for persistence, no backend and no auth.
 
+Not a developer? Read the [user guide](USER-GUIDE.md) — it explains the vocabulary, a
+first run, backups and shortcuts without any setup instructions.
+
     npm install
     npm run dev     # http://127.0.0.1:5179
 
