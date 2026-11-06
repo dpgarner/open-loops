@@ -24,6 +24,8 @@ GitHub Actions runs `npm test` and `npm run build` on every push to `main` — s
 The glossary, shortcut table, and date and data rules in `USER-GUIDE.md` are generated from
 `src/glossary.json`, `src/shortcuts.json` and `src/rules.json`, which the help panel also
 renders — `npm run docs` rewrites the guide, and tests fail if any block drifts out of date.
+CI runs `npm run docs:check` before the tests, so a stale block fails with the generator's own
+message rather than a test assertion.
 
 ## Which problem each screen solves
 

@@ -26,6 +26,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Check generated docs
+        run: npm run docs:check
+
       - name: Run the Jest suite
         run: npm test
 

@@ -15,7 +15,8 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "docs": "node scripts/docs.cjs"
+    "docs": "node scripts/docs.cjs",
+    "docs:check": "node scripts/docs.cjs --check"
   },
   "dependencies": {
     "react": "^18.3.1",
