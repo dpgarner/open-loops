@@ -1,0 +1,13 @@
+{
+  "dates": [
+    "An action dated in the future leaves its context list and waits in Deferred; it comes back on its own.",
+    "An action dated today or earlier stays where it is and also appears in Tickler → Due now, labelled \"due today\", \"1 day overdue\", \"3 days overdue\" and so on.",
+    "An idea dated in the future stays on the Someday list, unhighlighted; when its day arrives it is highlighted and appears under Due now.",
+    "Push a week moves a date seven days on from today, which is the usual answer to \"not this week\"."
+  ],
+  "data": [
+    "Everything you type is saved in this browser's local storage, for the address you opened the app at. There is no account and no copy anywhere else.",
+    "Export downloads a single file named like open-loops-2026-11-06.json — that file is your backup, plain readable text.",
+    "Import reads one of those files and restores it, replacing everything rather than merging; export first if there is anything you would miss, and an invalid file changes nothing."
+  ]
+}

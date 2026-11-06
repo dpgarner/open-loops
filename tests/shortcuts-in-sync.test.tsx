@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react';
 import HelpPanel from '../src/components/HelpPanel';
 import SHORTCUTS from '../src/shortcuts.json';
 
-const { renderShortcutTable } = require('../scripts/shortcuts.cjs') as {
+const { renderShortcutTable } = require('../scripts/docs.cjs') as {
   renderShortcutTable: (shortcuts: Array<{ keys: string; description: string }>) => string;
 };
 

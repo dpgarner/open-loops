@@ -219,14 +219,12 @@ section.
 Dates here are days, not times. A date of the 8th means "the morning of the 8th", and the
 switch happens at your computer's local midnight, not at midnight somewhere else.
 
-- An action dated **in the future** leaves its context list and waits in **Deferred**. It
-  comes back on its own.
-- An action dated **today or earlier** stays where it is and also appears in **Tickler →
-  Due now**, labelled "due today", "1 day overdue", "3 days overdue" and so on.
-- An idea dated in the future stays on the Someday list, unhighlighted. When its day
-  arrives it is highlighted and appears under **Due now**.
-- **Push a week** moves a date seven days on from today, which is the usual answer to "not
-  this week".
+<!-- dates:start -->
+- An action dated in the future leaves its context list and waits in Deferred; it comes back on its own.
+- An action dated today or earlier stays where it is and also appears in Tickler → Due now, labelled "due today", "1 day overdue", "3 days overdue" and so on.
+- An idea dated in the future stays on the Someday list, unhighlighted; when its day arrives it is highlighted and appears under Due now.
+- Push a week moves a date seven days on from today, which is the usual answer to "not this week".
+<!-- dates:end -->
 
 Because dates are days, they do not drift with time zones or with the time of day you set
 them.
@@ -275,17 +273,11 @@ a version number, so compare the commit when you need to know exactly what you h
 
 ## Your data, backups, and how not to lose it
 
-Everything you type is saved in your browser's local storage, for the address you opened
-the app at. There is no account and no copy anywhere else, which is good for privacy and
-bad for accidents.
-
-**Export** downloads a single file named like `open-loops-2026-11-06.json`. That file is
-your backup. Keep it wherever you keep other files — it is plain, readable text.
-
-**Import** reads one of those files and restores it. It *replaces* everything currently in
-the app rather than merging, so export before you import if there is anything you would
-miss. If the file is not valid or is not an Open Loops backup, the app says so and changes
-nothing.
+<!-- data:start -->
+- Everything you type is saved in this browser's local storage, for the address you opened the app at. There is no account and no copy anywhere else.
+- Export downloads a single file named like open-loops-2026-11-06.json — that file is your backup, plain readable text.
+- Import reads one of those files and restores it, replacing everything rather than merging; export first if there is anything you would miss, and an invalid file changes nothing.
+<!-- data:end -->
 
 Things that will make your lists disappear:
 
@@ -312,8 +304,9 @@ There is one application-wide shortcut, and it is the useful one:
 | **Space** | Ticks or unticks a checkbox you have tabbed to. |
 <!-- shortcuts:end -->
 
-This table and the help panel's shortcut list are generated from the same
-`src/shortcuts.json`; `npm run docs:shortcuts` rewrites it after an edit.
+This table is generated from `src/shortcuts.json`, and the date and data rules in the
+earlier chapters from `src/rules.json` — the help panel renders the same files. `npm run docs`
+rewrites all three blocks after an edit.
 
 Everything else is a click, and every button says what it does. If you forget any of the
 above, the **Help** button at the bottom of the sidebar opens a summary over whatever you

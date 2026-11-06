@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { build, buildLabel } from '../build';
 import SHORTCUTS from '../shortcuts.json';
+import RULES from '../rules.json';
 
 interface Props {
   onClose: () => void;
@@ -125,32 +126,18 @@ export default function HelpPanel({ onClose }: Props) {
           <section className="help-section">
             <h3>Dates</h3>
             <ul className="help-list">
-              <li>
-                An action dated in the future leaves its context list and waits in{' '}
-                <strong>Deferred</strong>. It comes back by itself on the morning of that day.
-              </li>
-              <li>
-                Dated today or earlier, an action also appears in <strong>Tickler → Due now</strong>{' '}
-                as "due today" or "N days overdue".
-              </li>
-              <li>
-                <strong>Push a week</strong> moves a date seven days on from today. Days switch at
-                your local midnight.
-              </li>
+              {RULES.dates.map((rule) => (
+                <li key={rule}>{rule}</li>
+              ))}
             </ul>
           </section>
 
           <section className="help-section">
             <h3>Your data</h3>
             <ul className="help-list">
-              <li>
-                Everything is stored in this browser, for this address. There is no account and no
-                copy anywhere else.
-              </li>
-              <li>
-                <strong>Export</strong> downloads a backup file; <strong>Import</strong> replaces
-                everything with one, so export first if there is anything you would miss.
-              </li>
+              {RULES.data.map((rule) => (
+                <li key={rule}>{rule}</li>
+              ))}
             </ul>
             <p className="help-note">
               <strong>Careful:</strong> Demo data replaces your lists immediately, without asking.
