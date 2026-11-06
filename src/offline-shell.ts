@@ -8,12 +8,47 @@
  */
 export const UPDATE_READY_EVENT = 'open-loops:update-ready';
 
+const CHECK_EVERY_MS = 5 * 60 * 1000;
+const MIN_GAP_MS = 60 * 1000;
+
 let announced = false;
 
 function announce(): void {
   if (announced) return;
   announced = true;
   window.dispatchEvent(new Event(UPDATE_READY_EVENT));
+}
+
+/**
+ * Asks the browser to re-fetch the worker on a timer and when the window comes
+ * back into view, so a page left open for hours still finds a new build. The
+ * browser's own check only runs on navigation (and at most once a day), and the
+ * gap guard keeps a flurry of focus and visibility events from hammering it.
+ */
+export function startUpdateChecks(run: () => void): () => void {
+  let last = Date.now();
+
+  const attempt = () => {
+    const now = Date.now();
+    if (now - last < MIN_GAP_MS) return;
+    last = now;
+    run();
+  };
+
+  const onFocus = () => attempt();
+  const onVisibility = () => {
+    if (document.visibilityState === 'visible') attempt();
+  };
+
+  window.addEventListener('focus', onFocus);
+  document.addEventListener('visibilitychange', onVisibility);
+  const timer = window.setInterval(attempt, CHECK_EVERY_MS);
+
+  return () => {
+    window.removeEventListener('focus', onFocus);
+    document.removeEventListener('visibilitychange', onVisibility);
+    window.clearInterval(timer);
+  };
 }
 
 /** Watches for a downloaded worker that is waiting to take over. */
@@ -39,7 +74,15 @@ export function watchForUpdates(): () => void {
       };
 
       registration.addEventListener('updatefound', onUpdateFound);
-      detach = () => registration.removeEventListener('updatefound', onUpdateFound);
+      const stopChecks = startUpdateChecks(() => {
+        void registration.update().catch(() => {
+          // Offline, or the registration vanished: nothing to report.
+        });
+      });
+      detach = () => {
+        registration.removeEventListener('updatefound', onUpdateFound);
+        stopChecks();
+      };
       // A worker may already be waiting from an earlier visit.
       check();
     })

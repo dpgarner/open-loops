@@ -80,7 +80,9 @@ A new build does not swap itself in under a running page. It installs and waits,
 and the app shows a small "a new version is ready" banner with a **Reload** button
 (`src/components/UpdateBanner.tsx`, `src/offline-shell.ts`). Each build stamps a
 fresh id into `dist/sw.js`, so an asset-only rebuild is still detected as an
-update.
+update. The page re-checks when the window regains focus and every five minutes
+(throttled to one check a minute), because the browser's own check only runs on
+navigation and at most once a day.
 
 ## Recovered
 
